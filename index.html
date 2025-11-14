@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room Android: PESADILLA TOTAL</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #f00;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Efecto de escaneo CRT más agresivo */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 50%, rgba(255, 0, 0, 0.05) 50%);
+            background-size: 100% 3px;
+            pointer-events: none;
+            z-index: 1000;
+            animation: scan 6s linear infinite;
+        }
+
+        /* Glitch aleatorio */
+        body::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.1);
+            pointer-events: none;
+            z-index: 999;
+            animation: randomGlitch 0.3s infinite;
+            opacity: 0;
+        }
+
+        @keyframes scan {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(3px); }
+        }
+
+        @keyframes randomGlitch {
+            0%, 90% { opacity: 0; }
+            95% { opacity: 1; transform: translate(2px, 2px); }
+            100% { opacity: 0; }
+        }
+
+        @keyframes glitchHard {
+            0%, 100% { 
+                text-shadow: 0 0 10px #f00, 0 0 20px #f00, 0 0 30px #f00;
+                transform: translate(0, 0);
+            }
+            20% { 
+                text-shadow: -3px 0 10px #0ff, 3px 0 20px #f0f;
+                transform: translate(-3px, 0);
+            }
+            40% { 
+                text-shadow: 3px 0 10px #0ff, -3px 0 20px #f0f;
+                transform: translate(3px, 0);
+            }
+            60% { 
+                text-shadow: 0 0 10px #f00, 0 0 20px #ff0;
+                transform: translate(0, 2px);
+            }
+        }
+
+        @keyframes corruption {
+            0%, 100% { opacity: 1; filter: blur(0); }
+            10% { opacity: 0.8; filter: blur(2px); }
+            20% { opacity: 1; filter: blur(0); }
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .terminal {
+            background: rgba(20, 0, 0, 0.95);
+            border: 3px solid #f00;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.5), inset 0 0 20px rgba(255, 0, 0, 0.1);
+            margin-bottom: 20px;
+            animation: corruption 5s infinite;
+        }
+
+        .terminal-header {
+            border-bottom: 3px solid #f00;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        h1 {
+            font-size: 1.5em;
+            animation: glitchHard 2s infinite;
+            text-transform: uppercase;
+            color: #f00;
+        }
+
+        .status {
+            color: #ff0;
+            font-size: 0.9em;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        .section-title {
+            color: #f00;
+            font-size: 1.4em;
+            margin: 20px 0 10px 0;
+            text-shadow: 0 0 15px #f00, 0 0 25px #f00;
+            animation: glitchHard 3s infinite;
+        }
+
+        .description {
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            padding: 10px;
+            background: rgba(100, 0, 0, 0.2);
+            border-left: 3px solid #f00;
+        }
+
+        .timer {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 3px solid #f00;
+            padding: 15px 25px;
+            font-size: 2em;
+            color: #f00;
+            text-shadow: 0 0 20px #f00;
+            z-index: 500;
+            animation: pulse 0.5s infinite;
+            display: none;
+        }
+
+        .timer.active {
+            display: block;
+        }
+
+        .question {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(50, 0, 0, 0.4);
+            border: 2px solid #f00;
+        }
+
+        .question-title {
+            color: #ff0;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: #000;
+            border: 2px solid #f00;
+            color: #f00;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 20px #f00;
+            animation: glitchHard 0.5s infinite;
+        }
+
+        .options {
+            margin-top: 10px;
+        }
+
+        .option {
+            background: rgba(50, 0, 0, 0.3);
+            border: 2px solid #f00;
+            padding: 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .option:hover {
+            background: rgba(255, 0, 0, 0.3);
+            box-shadow: 0 0 15px #f00;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: rgba(255, 0, 0, 0.5);
+            border-color: #ff0;
+            box-shadow: 0 0 20px #ff0;
+        }
+
+        button {
+            background: #000;
+            color: #f00;
+            border: 3px solid #f00;
+            padding: 15px 40px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #f00;
+            color: #000;
+            box-shadow: 0 0 30px #f00;
+            animation: glitchHard 0.5s infinite;
+        }
+
+        button:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        .error {
+            color: #f00;
+            text-shadow: 0 0 15px #f00;
+            margin-top: 10px;
+            animation: glitchHard 1s infinite;
+            font-size: 1.2em;
+        }
+
+        .success {
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff;
+            margin-top: 10px;
+        }
+
+        .console-output {
+            background: #000;
+            border: 3px solid #f00;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 0.9em;
+        }
+
+        .console-line {
+            margin: 5px 0;
+            color: #0f0;
+        }
+
+        .console-line.error {
+            color: #f00;
+            text-shadow: 0 0 10px #f00;
+        }
+
+        .console-line.warning {
+            color: #ff0;
+        }
+
+        .console-line.success {
+            color: #0ff;
+        }
+
+        .start-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .start-screen h1 {
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .start-screen .subtitle {
+            color: #f00;
+            font-size: 1.3em;
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px #f00;
+        }
+
+        .start-screen .instructions {
+            color: #fff;
+            margin: 30px auto;
+            line-height: 1.8;
+            text-align: left;
+            max-width: 700px;
+        }
+
+        .start-screen .warning {
+            color: #ff0;
+            margin: 20px 0;
+            font-size: 1.1em;
+            padding: 20px;
+            background: rgba(100, 100, 0, 0.1);
+            border: 2px solid #ff0;
+        }
+
+        .failure-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .failure-screen h1 {
+            font-size: 2.5em;
+            color: #f00;
+            text-shadow: 0 0 30px #f00;
+            margin-bottom: 30px;
+            animation: glitchHard 1s infinite;
+        }
+
+        .victory-screen {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .victory-screen h1 {
+            font-size: 2.5em;
+            color: #0ff;
+            text-shadow: 0 0 30px #0ff;
+            animation: glitchHard 2s infinite;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .ascii-art {
+            font-size: 0.6em;
+            line-height: 1;
+            color: #f00;
+            margin: 20px 0;
+            text-align: center;
+            text-shadow: 0 0 10px #f00;
+        }
+
+        .corrupted-image {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            background: linear-gradient(45deg, #000 25%, #300 25%, #300 50%, #000 50%, #000 75%, #300 75%, #300);
+            background-size: 20px 20px;
+            margin: 20px auto;
+            border: 3px solid #f00;
+            position: relative;
+            overflow: hidden;
+            animation: imageCorruption 0.5s infinite;
+        }
+
+        @keyframes imageCorruption {
+            0%, 100% { filter: hue-rotate(0deg); }
+            25% { filter: hue-rotate(90deg) blur(2px); }
+            50% { filter: hue-rotate(180deg); }
+            75% { filter: hue-rotate(270deg) blur(1px); }
+        }
+
+        .corrupted-image::before {
+            content: "⚠ IMAGEN CORROMPIDA ⚠";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #f00;
+            font-size: 1.2em;
+            text-shadow: 0 0 20px #f00;
+            animation: glitchHard 1s infinite;
+        }
+
+        .screen-shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-10px, 0); }
+            20%, 40%, 60%, 80% { transform: translate(10px, 0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="timer" id="timer">20</div>
+
+    <div class="container">
+        <div class="terminal">
+            <div class="terminal-header">
+                <h1>⚠ PESADILLA TOTAL ⚠</h1>
+                <span class="status" id="status">SISTEMA CORRUPTO</span>
+            </div>
+
+            <!-- Pantalla de inicio -->
+            <div id="startScreen" class="start-screen">
+                <div class="ascii-art">
+    ██████╗ ███████╗███████╗ █████╗ ██████╗ ██╗██╗     ██╗      █████╗ 
+    ██╔══██╗██╔════╝██╔════╝██╔══██╗██╔══██╗██║██║     ██║     ██╔══██╗
+    ██████╔╝█████╗  ███████╗███████║██║  ██║██║██║     ██║     ███████║
+    ██╔═══╝ ██╔══╝  ╚════██║██╔══██║██║  ██║██║██║     ██║     ██╔══██║
+    ██║     ███████╗███████║██║  ██║██████╔╝██║███████╗███████╗██║  ██║
+    ╚═╝     ╚══════╝╚══════╝╚═╝  ╚═╝╚═════╝ ╚═╝╚══════╝╚══════╝╚═╝  ╚═╝
+                </div>
+                <div class="subtitle">Escape Room Android</div>
+                <div class="warning">
+                    ⚠ ADVERTENCIA CRÍTICA ⚠<br>
+                    La realidad del almacenamiento se ha distorsionado.<br>
+                    Un error significa REINICIO TOTAL.
+                </div>
+                <div class="instructions">
+                    <p style="color: #f00;">> CONDICIONES DE SUPERVIVENCIA:</p>
+                    <p>> No hay pistas. No hay ayuda. Solo conocimiento puro.</p>
+                    <p>> Los temporizadores son reales... o tal vez no.</p>
+                    <p>> Cada respuesta incorrecta = FALLA CRÍTICA</p>
+                    <p>> </p>
+                    <p style="color: #ff0;">> ¿Estás preparado para la pesadilla?</p>
+                </div>
+                <button onclick="startGame()">INICIAR PESADILLA</button>
+            </div>
+
+            <!-- Contenedor del juego -->
+            <div id="gameContainer" class="hidden">
+                <div id="content"></div>
+                <div id="errorMsg" class="error hidden"></div>
+                <button id="submitBtn" onclick="submitAnswer()">ENVIAR RESPUESTA</button>
+                <div class="console-output" id="console">
+                    <div class="console-line error">> SISTEMA CORRUPTO - ESTADO CRÍTICO</div>
+                    <div class="console-line warning">> Cualquier error es fatal</div>
+                    <div class="console-line">> Esperando input del operador...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos del juego
+        const gameData = {
+            sections: [
+                {
+                    title: "Ingreso al Sistema Corrupto",
+                    description: "La realidad del almacenamiento se ha distorsionado...",
+                    questions: [{
+                        type: "text",
+                        title: "Nombre del Operador (Requerido para auditoría)",
+                        required: true
+                    }]
+                },
+                {
+                    title: "Temporizador del Pánico",
+                    description: "⚠️ Tienes 20 segundos para responder.",
+                    hasTimer: true,
+                    hasImage: true,
+                    questions: [{
+                        type: "multiple_choice",
+                        title: "Selecciona la partición que NO pertenece a un dispositivo Android real:",
+                        options: [
+                            "/system",
+                            "/data",
+                            "/cache",
+                            "/dreamcore"
+                        ],
+                        correct: 3
+                    }]
+                },
+                {
+                    title: "El Laberinto de Rutas Fantasma",
+                    description: "Cuatro rutas, solo una existe realmente.",
+                    hasImage: true,
+                    questions: [{
+                        type: "multiple_choice",
+                        title: "¿Cuál de estas rutas es completamente inválida según la estructura de almacenamiento de Android?",
+                        options: [
+                            "/Android/data/com.app.example",
+                            "/storage/emulated/0/Android/data",
+                            "/mnt/runtime/write/emulated/0",
+                            "/root/system32/boot/win32"
+                        ],
+                        correct: 3
+                    }]
+                },
+                {
+                    title: "Imagen de Partición Corrompida",
+                    description: "Observa la imagen (corrupta). La partición rota debe identificarse.",
+                    hasImage: true,
+                    questions: [{
+                        type: "multiple_choice",
+                        title: "La imagen muestra bloques dañados. ¿Qué partición suele contener datos sensibles del usuario?",
+                        options: [
+                            "/boot",
+                            "/recovery",
+                            "/data",
+                            "/cache"
+                        ],
+                        correct: 2
+                    }]
+                },
+                {
+                    title: "Permisos Invertidos",
+                    description: "El sistema ha mezclado permisos internos con externos.",
+                    questions: [{
+                        type: "text",
+                        title: "Escribe el permiso EXACTO requerido para leer multimedia en almacenamiento externo.",
+                        required: true,
+                        validation: "READ_EXTERNAL_STORAGE"
+                    }]
+                },
+                {
+                    title: "Acertijo de Entropía de Memoria",
+                    description: "Si un archivo creado con openFileOutput desaparece tras reinstalar la app...",
+                    questions: [{
+                        type: "multiple_choice",
+                        title: "¿Qué implica esto sobre su ubicación?",
+                        options: [
+                            "Fue almacenado en memoria externa pública.",
+                            "Fue almacenado en memoria interna privada.",
+                            "Fue replicado en caché persistente.",
+                            "Fue migrado a adoptable storage sin permiso."
+                        ],
+                        correct: 1
+                    }]
+                },
+                {
+                    title: "Rutas Gemelas del Caos",
+                    description: "Dos rutas casi idénticas, pero solo una existe.",
+                    questions: [{
+                        type: "multiple_choice",
+                        title: "Selecciona la ruta válida:",
+                        options: [
+                            "/Android/datx/com.example.app",
+                            "/Android/data/com.example.app",
+                            "/Android/daa/com.example.app",
+                            "/Android/deta/com.example.app"
+                        ],
+                        correct: 1
+                    }]
+                },
+                {
+                    title: "Última Prueba: Coherencia Total",
+                    description: "El almacenamiento adoptable ha entrado en modo de emergencia.",
+                    hasImage: true,
+                    questions: [{
+                        type: "text",
+                        title: "Explica brevemente (1 línea) por qué retirar una SD Adoptable destruye el acceso a apps.",
+                        required: true,
+                        validation: "acceso"
+                    }]
+                }
+            ]
+        };
+
+        let currentSection = 0;
+        let answers = [];
+        let timerInterval;
+
+        function startGame() {
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameContainer').classList.remove('hidden');
+            logConsole("Iniciando protocolo de pesadilla...", "error");
+            setTimeout(() => {
+                logConsole("Sistema corrompido. Procediendo con precaución.", "warning");
+                renderSection();
+            }, 1000);
+        }
+
+        function renderSection() {
+            const section = gameData.sections[currentSection];
+            const content = document.getElementById('content');
+            
+            let html = `
+                <div class="section-title">> ${section.title}</div>
+                <div class="description">${section.description}</div>
+            `;
+
+            if (section.hasImage) {
+                html += `<div class="corrupted-image"></div>`;
+            }
+
+            section.questions.forEach((q, index) => {
+                html += `<div class="question">
+                    <div class="question-title">${q.title}</div>`;
+                
+                if (q.type === "text") {
+                    html += `<input type="text" id="q${index}" placeholder="Ingresa tu respuesta exacta...">`;
+                } else if (q.type === "multiple_choice") {
+                    html += `<div class="options">`;
+                    q.options.forEach((opt, i) => {
+                        html += `<div class="option" onclick="selectOption(${index}, ${i})" id="opt${index}_${i}">
+                            ${i + 1}. ${opt}
+                        </div>`;
+                    });
+                    html += `</div>`;
+                }
+                
+                html += `</div>`;
+            });
+
+            content.innerHTML = html;
+            document.getElementById('errorMsg').classList.add('hidden');
+
+            // Activar temporizador si la sección lo requiere
+            if (section.hasTimer) {
+                startTimer();
+            }
+
+            // Efecto de glitch al cargar
+            document.querySelector('.terminal').classList.add('screen-shake');
+            setTimeout(() => {
+                document.querySelector('.terminal').classList.remove('screen-shake');
+            }, 500);
+        }
+
+        function startTimer() {
+            let timeLeft = 20;
+            const timerElement = document.getElementById('timer');
+            timerElement.classList.add('active');
+            timerElement.textContent = timeLeft;
+
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 5) {
+                    timerElement.style.fontSize = '3em';
+                    timerElement.style.animation = 'glitchHard 0.3s infinite';
+                }
+
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.classList.remove('active');
+                    logConsole("⚠ TIEMPO AGOTADO - Pero continuarás...", "warning");
+                    // No falla, es psicológico
+                }
+            }, 1000);
+        }
+
+        function selectOption(questionIndex, optionIndex) {
+            document.querySelectorAll(`[id^="opt${questionIndex}_"]`).forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.getElementById(`opt${questionIndex}_${optionIndex}`).classList.add('selected');
+            
+            if (!answers[currentSection]) answers[currentSection] = [];
+            answers[currentSection][questionIndex] = optionIndex;
+        }
+
+        function submitAnswer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                document.getElementById('timer').classList.remove('active');
+            }
+
+            const section = gameData.sections[currentSection];
+            const sectionAnswers = [];
+            let allValid = true;
+
+            section.questions.forEach((q, index) => {
+                if (q.type === "text") {
+                    const input = document.getElementById(`q${index}`);
+                    const value = input.value.trim();
+                    
+                    if (q.required && !value) {
+                        showError("⚠ CAMPO REQUERIDO - RESPUESTA OBLIGATORIA");
+                        allValid = false;
+                        return;
+                    }
+
+                    // Validación estricta
+                    if (q.validation) {
+                        if (!value.includes(q.validation)) {
+                            triggerFailure();
+                            return;
+                        }
+                    }
+                    
+                    sectionAnswers.push(value);
+                } else if (q.type === "multiple_choice") {
+                    const selected = answers[currentSection] ? answers[currentSection][index] : null;
+                    if (selected === null || selected === undefined) {
+                        showError("⚠ DEBES SELECCIONAR UNA OPCIÓN");
+                        allValid = false;
+                        return;
+                    }
+                    
+                    if (q.correct !== undefined && selected !== q.correct) {
+                        triggerFailure();
+                        return;
+                    }
+                    
+                    sectionAnswers.push(selected);
+                }
+            });
+
+            if (!allValid) return;
+
+            answers[currentSection] = sectionAnswers;
+            logConsole(`Sección ${currentSection + 1} - ${section.title} - COMPLETADA`, "success");
+            
+            currentSection++;
+            
+            if (currentSection >= gameData.sections.length) {
+                showVictory();
+            } else {
+                renderSection();
+            }
+        }
+
+        function triggerFailure() {
+            logConsole("⚠⚠⚠ CRITICAL FAILURE DETECTED ⚠⚠⚠", "error");
+            logConsole("Sistema en colapso total...", "error");
+            
+            // Efecto de pantalla
+            document.body.style.animation = 'randomGlitch 0.1s infinite';
+            
+            setTimeout(() => {
+                const content = document.getElementById('content');
+                content.innerHTML = `
+                    <div class="failure-screen">
+                        <h1>⚠ CRITICAL_FAILURE_SEGFAULT ⚠</h1>
+                        <div class="ascii-art">
+    ███████╗ █████╗ ██╗██╗     ██╗   ██╗██████╗ ███████╗
+    ██╔════╝██╔══██╗██║██║     ██║   ██║██╔══██╗██╔════╝
+    █████╗  ███████║██║██║     ██║   ██║██████╔╝█████╗  
+    ██╔══╝  ██╔══██║██║██║     ██║   ██║██╔══██╗██╔══╝  
+    ██║     ██║  ██║██║███████╗╚██████╔╝██║  ██║███████╗
+    ╚═╝     ╚═╝  ╚═╝╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚══════╝
+                        </div>
+                        <div class="corrupted-image"></div>
+                        <p style="color: #f00; margin: 20px 0; font-size: 1.2em;">
+                            ⚠ El sistema ha detectado corrupción masiva ⚠
+                        </p>
+                        <p style="color: #fff;">Tu avance ha sido revertido.</p>
+                        <p style="color: #ff0; margin-top: 20px;">Una respuesta incorrecta = muerte instantánea.</p>
+                        <button onclick="location.reload()">REINICIAR DESDE CERO</button>
+                    </div>
+                `;
+                document.getElementById('submitBtn').classList.add('hidden');
+            }, 1000);
+        }
+
+        function showVictory() {
+            logConsole("¡SISTEMA RECONSTRUIDO CON ÉXITO!", "success");
+            
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="victory-screen">
+                    <div class="ascii-art" style="color: #0ff;">
+    ██╗   ██╗██╗ ██████╗████████╗ ██████╗ ██████╗ ██╗   ██╗
+    ██║   ██║██║██╔════╝╚══██╔══╝██╔═══██╗██╔══██╗╚██╗ ██╔╝
+    ██║   ██║██║██║        ██║   ██║   ██║██████╔╝ ╚████╔╝ 
+    ╚██╗ ██╔╝██║██║        ██║   ██║   ██║██╔══██╗  ╚██╔╝  
+     ╚████╔╝ ██║╚██████╗   ██║   ╚██████╔╝██║  ██║   ██║   
+      ╚═══╝  ╚═╝ ╚═════╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝   ╚═╝   
+                    </div>
+                    <h1>SISTEMA RECONSTRUIDO</h1>
+                    <div class="section-title" style="color: #0ff;">🎉 Sobreviviste al MODO PESADILLA 🎉</div>
+                    <p style="color: #fff; margin: 20px 0; line-height: 1.8;">
+                        Has navegado por la corrupción, el caos y las trampas psicológicas.<br>
+                        Tu conocimiento de Android Storage ha sido probado al límite.<br>
+                        <br>
+                        <span style="color: #0ff; font-size: 1.3em;">MUY POCOS LO LOGRAN.</span>
+                    </p>
+                    <button onclick="location.reload()">VOLVER AL INICIO</button>
+                </div>
+            `;
+            document.getElementById('submitBtn').classList.add('hidden');
+        }
+
+        function showError(msg) {
+            const errorDiv = document.getElementById('errorMsg');
+            errorDiv.textContent = msg;
+            errorDiv.classList.remove('hidden');
+            document.querySelector('.terminal').classList.add('screen-shake');
+            setTimeout(() => {
+                errorDiv.classList.add('hidden');
+                document.querySelector('.terminal').classList.remove('screen-shake');
+            }, 3000);
+        }
+
+        function logConsole(msg, type = "") {
+            const consoleDiv = document.getElementById('console');
+            const line = document.createElement('div');
+            line.className = `console-line ${type}`;
+            line.textContent = `> ${msg}`;
+            consoleDiv.appendChild(line);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        // Mensaje de advertencia en consola
+        console.log("%c╔═══════════════════════════════════════════════════════════╗", "color: #f00; font-size: 14px");
+        console.log("%c║                                                           ║", "color: #f00; font-size: 14px");
+        console.log("%c║        ESCAPE ROOM ANDROID - PESADILLA TOTAL             ║", "color: #f00; font-size: 14px");
+        console.log("%c║                                                           ║", "color: #f00; font-size: 14px");
+        console.log("%c╚═══════════════════════════════════════════════════════════╝", "color: #f00; font-size: 14px");
+        console.log("");
+        console.log("%c⚠⚠⚠ ADVERTENCIA CRÍTICA ⚠⚠⚠", "color: #f00; font-size: 16px; font-weight: bold");
+        console.log("");
+        console.log("%cEste modo NO tiene pistas.", "color: #ff0; font-size: 13px");
+        console.log("%cSolo conocimiento puro de Android Storage.", "color: #ff0; font-size: 13px");
+        console.log("%cUn error = FALLO CRÍTICO = Reinicio total.", "color: #f00; font-size: 13px; font-weight: bold");
+        console.log("");
+        console.log("%c🔥 DIFICULTAD: EXTREMA 🔥", "color: #f00; font-size: 14px; font-weight: bold");
+        console.log("");
+        console.log("%c════════════════════════════════════════════════════════════", "color: #f00");
+        console.log("");
+
+        // Efectos de corrupción aleatoria
+        setInterval(() => {
+            if (Math.random() > 0.95) {
+                document.body.style.filter = 'hue-rotate(180deg)';
+                setTimeout(() => {
+                    document.body.style.filter = 'none';
+                }, 100);
+            }
+        }, 2000);
+
+        // Glitch aleatorio en el título
+        setInterval(() => {
+            if (Math.random() > 0.9) {
+                const status = document.getElementById('status');
+                const messages = [
+                    'SISTEMA CORRUPTO',
+                    'ERROR CRÍTICO',
+                    'FALLO INMINENTE',
+                    'MEMORIA DAÑADA',
+                    'INTEGRIDAD COMPROMETIDA'
+                ];
+                status.textContent = messages[Math.floor(Math.random() * messages.length)];
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
