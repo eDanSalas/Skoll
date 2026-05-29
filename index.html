@@ -14,13 +14,12 @@
             --border-color: #1e293b;
             --border-hover: #334155;
             --text-main: #f8fafc;
-            --text-muted: #64748b;
-            --primary: #22c55e; /* Verde tokens */
-            --secondary: #06b6d4; /* Cyan variables/reglas */
+            --text-muted: #94a3b8;
+            --primary: #22c55e;
+            --secondary: #06b6d4;
             --error: #ef4444;
-            --warning: #eab308; /* Amarillo acciones semánticas */
+            --warning: #eab308;
             --success: #10b981;
-            --comment: #94a3b8;
         }
 
         * {
@@ -40,7 +39,7 @@
         }
 
         .container {
-            max-width: 950px;
+            max-width: 900px;
             margin: 40px auto;
             padding: 20px;
             min-height: calc(100vh - 80px);
@@ -83,134 +82,24 @@
             border: 1px solid var(--secondary);
         }
 
-        /* --- ESTILOS TEMÁTICA YACC --- */
-        .yacc-section-title {
-            color: var(--warning);
+        .section-title {
+            color: var(--secondary);
             font-family: 'Fira Code', monospace;
-            font-size: 1.2em;
-            margin: 20px 0 10px 0;
-            font-weight: bold;
+            font-size: 1.4em;
+            margin: 20px 0 15px 0;
         }
 
-        .yacc-divider {
-            color: var(--primary);
-            font-family: 'Fira Code', monospace;
-            font-size: 1.5em;
-            font-weight: bold;
-            margin: 15px 0 25px 0;
-        }
-
-        .yacc-comment {
-            color: var(--comment);
-            font-family: 'Fira Code', monospace;
+        .description {
+            color: var(--text-muted);
             margin-bottom: 25px;
             line-height: 1.6;
-            font-style: italic;
-        }
-
-        .yacc-block {
-            margin: 25px 0;
-            padding: 20px 25px;
-            background: rgba(2, 6, 23, 0.5);
+            padding: 15px 20px;
+            background: rgba(30, 41, 59, 0.5);
             border-left: 4px solid var(--secondary);
-            border-radius: 4px;
-            font-family: 'Fira Code', monospace;
-        }
-
-        .yacc-lhs {
-            color: var(--secondary);
-            font-weight: bold;
+            border-radius: 0 8px 8px 0;
             font-size: 1.1em;
-            margin-bottom: 15px;
-            display: block;
         }
 
-        .yacc-colon {
-            color: var(--text-main);
-            margin-left: 10px;
-        }
-
-        .yacc-rhs {
-            padding-left: 40px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .yacc-pipe {
-            color: var(--text-main);
-            font-weight: bold;
-            display: inline-block;
-            width: 25px;
-        }
-
-        .yacc-action {
-            color: var(--warning);
-            margin-left: 15px;
-            opacity: 0.8;
-            transition: opacity 0.2s;
-        }
-
-        .yacc-semi {
-            color: var(--text-main);
-            font-weight: bold;
-            font-size: 1.2em;
-            margin-top: 15px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            background: var(--bg-dark);
-            border: 1px dashed var(--border-hover);
-            color: var(--warning);
-            padding: 12px;
-            font-family: 'Fira Code', monospace;
-            font-size: 1em;
-            margin-top: 5px;
-            transition: all 0.3s;
-        }
-
-        input[type="text"]:focus {
-            outline: none;
-            border-color: var(--warning);
-            background: rgba(234, 179, 8, 0.05);
-        }
-
-        .option {
-            background: transparent;
-            padding: 8px 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            color: var(--primary);
-            border-radius: 4px;
-            display: flex;
-            align-items: flex-start;
-        }
-
-        .option:hover {
-            background: rgba(34, 197, 94, 0.1);
-        }
-
-        .option:hover .yacc-action {
-            opacity: 1;
-        }
-
-        .option.selected {
-            background: rgba(34, 197, 94, 0.15);
-            font-weight: bold;
-            border-left: 3px solid var(--primary);
-        }
-
-        .option.selected .yacc-action {
-            opacity: 1;
-            color: #fff;
-        }
-
-        .option-text {
-            flex: 1;
-        }
-
-        /* --- CONTROLES GENERALES --- */
         .timer {
             position: fixed;
             top: 20px;
@@ -228,18 +117,86 @@
             transition: color 0.3s;
         }
 
-        .timer.active { display: block; }
+        .timer.active {
+            display: block;
+        }
+
+        .question {
+            margin: 25px 0;
+            padding: 25px;
+            background: rgba(30, 41, 59, 0.3);
+            border: 1px solid var(--border-hover);
+            border-radius: 8px;
+        }
+
+        .question-title {
+            color: var(--text-main);
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            background: var(--bg-dark);
+            border: 1px solid var(--border-hover);
+            border-radius: 6px;
+            color: var(--primary);
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.1);
+        }
+
+        .options {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid var(--border-hover);
+            border-radius: 6px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .option:hover {
+            border-color: var(--primary);
+            color: var(--text-main);
+            background: rgba(34, 197, 94, 0.05);
+        }
+
+        .option.selected {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: var(--primary);
+            color: var(--primary);
+            font-weight: bold;
+        }
 
         button {
-            background: var(--bg-dark);
-            color: var(--secondary);
-            border: 2px solid var(--secondary);
-            border-radius: 4px;
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 6px;
             padding: 15px 40px;
             font-family: 'Fira Code', monospace;
             font-size: 1.1em;
             cursor: pointer;
             margin-top: 30px;
+            text-transform: uppercase;
             transition: all 0.3s;
             font-weight: bold;
             display: block;
@@ -247,9 +204,14 @@
         }
 
         button:hover {
-            background: var(--secondary);
+            background: var(--primary);
             color: var(--bg-dark);
-            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+            box-shadow: 0 4px 14px rgba(34, 197, 94, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
 
         .error {
@@ -260,11 +222,17 @@
             padding: 10px;
             background: rgba(239, 68, 68, 0.1);
             border-left: 3px solid var(--error);
+            border-radius: 4px;
+        }
+
+        .success {
+            color: var(--success);
         }
 
         .console-output {
             background: var(--bg-dark);
             border: 1px solid var(--border-color);
+            border-radius: 6px;
             padding: 20px;
             margin-top: 30px;
             max-height: 200px;
@@ -273,49 +241,70 @@
             font-size: 0.85em;
         }
 
-        .console-line { margin: 6px 0; color: var(--text-muted); }
+        .console-line {
+            margin: 6px 0;
+            color: var(--text-muted);
+        }
+
         .console-line.error { color: var(--error); }
         .console-line.warning { color: var(--warning); }
         .console-line.success { color: var(--success); }
 
-        .start-screen, .failure-screen, .victory-screen { text-align: center; padding: 40px 20px; }
-        .start-screen h1, .failure-screen h1, .victory-screen h1 { font-size: 2.2em; margin-bottom: 20px; }
-        
-        .instructions {
+        .start-screen, .failure-screen, .victory-screen {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .start-screen h1, .failure-screen h1, .victory-screen h1 {
+            font-size: 2.2em;
+            margin-bottom: 20px;
+        }
+
+        .start-screen .subtitle {
+            color: var(--secondary);
+            font-family: 'Fira Code', monospace;
+            font-size: 1.2em;
+            margin-bottom: 40px;
+        }
+
+        .start-screen .instructions {
             color: var(--text-muted);
             margin: 30px auto;
+            line-height: 1.8;
             text-align: left;
             max-width: 700px;
             background: rgba(30, 41, 59, 0.3);
             padding: 25px;
-            border: 1px dashed var(--border-hover);
+            border-radius: 8px;
+            border: 1px solid var(--border-hover);
+            font-size: 1.1em;
+        }
+
+        .start-screen .warning {
+            color: var(--warning);
+            margin: 20px 0;
             font-size: 1em;
+            padding: 15px;
+            background: rgba(234, 179, 8, 0.1);
+            border: 1px solid var(--warning);
+            border-radius: 6px;
             font-family: 'Fira Code', monospace;
         }
 
         .failure-screen h1 { color: var(--error); }
         .victory-screen h1 { color: var(--primary); }
+
         .hidden { display: none !important; }
 
         .ascii-art {
             font-family: 'Fira Code', monospace;
             font-size: 12px;
             line-height: 1.2;
-            color: var(--secondary);
+            color: var(--primary);
             margin: 30px 0;
             text-align: center;
             white-space: pre;
             overflow-x: auto;
-        }
-
-        /* Estilo para la caja del código de verificación */
-        .verification-box {
-            margin: 30px auto;
-            padding: 20px;
-            border: 1px dashed var(--warning);
-            background: rgba(234, 179, 8, 0.1);
-            border-radius: 8px;
-            max-width: 600px;
         }
     </style>
 </head>
@@ -325,8 +314,8 @@
     <div class="container">
         <div class="terminal">
             <div class="terminal-header">
-                <h1>> parser.y - GNU Bison / YACC</h1>
-                <span class="status" id="status">ESTADO: PARSING</span>
+                <h1>> Analizador Sintáctico (YACC)</h1>
+                <span class="status" id="status">ESTADO: COMPILANDO</span>
             </div>
 
             <div id="startScreen" class="start-screen">
@@ -340,38 +329,41 @@
                        | |                  
                        |_|                  
                 </div>
-                <div class="yacc-section-title">%module Software_de_Base_Compiladores</div>
-                <div class="instructions">
-                    <span style="color: var(--warning);">%{</span><br>
-                    &nbsp;&nbsp;#include &lt;stdio.h&gt;<br>
-                    &nbsp;&nbsp;/* Reglas de ejecución del evaluador sintáctico */<br>
-                    &nbsp;&nbsp;int limite_tiempo = true;<br>
-                    &nbsp;&nbsp;int errores_permitidos = 0;<br>
-                    <span style="color: var(--warning);">%}</span><br><br>
-                    <span style="color: var(--primary);">%token</span> START_EVALUATION<br>
-                    <span style="color: var(--primary);">%%</span>
+                <div class="subtitle">Evaluación Técnica: YACC y Estructura de un Compilador</div>
+                <div class="warning">
+                    [ WARN ] Validador sintáctico estricto activado.<br>
+                    Cualquier desvío en las reglas de gramática provocará un error fatal en el compilador.
                 </div>
-                <button onclick="startGame()">yyparse(); // INICIAR</button>
+                <div class="instructions">
+                    <p style="color: var(--primary); font-family: 'Fira Code', monospace;">$ cat instrucciones_yacc.txt</p>
+                    <p>> El análisis sintáctico evaluará la jerarquía y derivación de tokens de entrada.</p>
+                    <p>> El scheduler limitará el tiempo de respuesta en bloques críticos de optimización.</p>
+                    <p>> Los errores sintácticos severos generarán un "Segmentation Fault" inmediato.</p>
+                    <p>> </p>
+                    <p style="color: var(--secondary);">> ¿Iniciar proceso de compilación y parsing?</p>
+                </div>
+                <button onclick="startGame()">INICIAR COMPILACIÓN</button>
             </div>
 
             <div id="gameContainer" class="hidden">
                 <div id="content"></div>
                 <div id="errorMsg" class="error hidden"></div>
-                <button id="submitBtn" onclick="submitAnswer()">REDUCIR (SHIFT/REDUCE)</button>
+                <button id="submitBtn" onclick="submitAnswer()">COMPILAR RESPUESTA</button>
                 <div class="console-output" id="console">
                     <div class="console-line">> [INIT] Cargando tablas lógicas de YACC...</div>
-                    <div class="console-line warning">> [WARN] Gramática LALR(1) detectada. 0 shift/reduce conflicts.</div>
-                    <div class="console-line">> [WAIT] Esperando flujo de tokens léxicos (stdin)...</div>
+                    <div class="console-line warning">> [WARN] Gramática cargada. Modo LALR(1) activo.</div>
+                    <div class="console-line">> [WAIT] Esperando flujo de tokens (stdin)...</div>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Datos de evaluación orientados a Compiladores y YACC
         const gameData = {
             sections: [
                 {
-                    title: "Inicialización del Entorno",
+                    title: "Inicialización del Entorno de Compilación",
                     description: "Preparación del flujo de análisis y registro del operador a cargo del framework de compilación.",
                     questions: [{
                         type: "text",
@@ -380,7 +372,7 @@
                     }]
                 },
                 {
-                    title: "Algoritmos_Analizador_Sintactico",
+                    title: "Algoritmos del Analizador Sintáctico",
                     description: "El scheduler de la CPU limita la resolución semántica. Tienes 20 segundos para responder.",
                     hasTimer: true,
                     questions: [{
@@ -392,11 +384,11 @@
                             "Un motor de análisis predictivo no asociativo.",
                             "LALR(1) ascendente fundamentado en desplazamientos y reducciones."
                         ],
-                        correct: 3 
+                        correct: 3 // Mantiene el índice original [3]
                     }]
                 },
                 {
-                    title: "Estructura_Especificacion_YACC",
+                    title: "Estructura de Especificación de YACC",
                     description: "Análisis gramatical y distribución formal de los archivos de código fuente (.y).",
                     questions: [{
                         type: "multiple_choice",
@@ -407,36 +399,36 @@
                             "Sección de rutinas de código complementarias en C.",
                             "Sección de optimización estática y generación de código de tres direcciones."
                         ],
-                        correct: 3 
+                        correct: 3 // Mantiene el índice original [3]
                     }]
                 },
                 {
-                    title: "Resolucion_Conflictos",
+                    title: "Resolución de Conflictos Léxico-Sintácticos",
                     description: "Determinación de estados lógicos internos cuando el compilador procesa gramáticas ambiguas.",
                     questions: [{
                         type: "multiple_choice",
-                        title: "YACC hace uso de una notación gramatical, ¿cuál es?",
+                        title: "Al compilar una gramática que presenta ambigüedad de precedencia, ¿qué tipo de conflicto reporta clásicamente YACC?",
                         options: [
-                            "DFS",
-                            "HTML",
-                            "BNF",
-                            "XML"
+                            "Conflicto de token no definido o error de escaneo.",
+                            "Conflicto de desbordamiento de pila del árbol sintáctico.",
+                            "Conflicto de Desplazamiento/Reducción (Shift/Reduce).",
+                            "Conflicto semántico de tipos incompatibles."
                         ],
-                        correct: 2 
+                        correct: 2 // Mantiene el índice original [2]
                     }]
                 },
                 {
-                    title: "Invocacion_Flujo_Parsing",
+                    title: "Invocación del Flujo de Parsing",
                     description: "Punto de entrada algorítmico ejecutado desde la función principal del programa conductor.",
                     questions: [{
                         type: "text",
                         title: "Escribe el nombre EXACTO de la función nativa generada por YACC para activar el análisis sintáctico (minúsculas):",
                         required: true,
-                        validation: "yyparse" 
+                        validation: "yyparse" // Modificado para hacer alusión real al compilador
                     }]
                 },
                 {
-                    title: "Interconexion_Fases",
+                    title: "Interconexión en la Arquitectura de un Compilador",
                     description: "Comunicación síncrona entre las fases del front-end para el procesamiento secuencial del código.",
                     questions: [{
                         type: "multiple_choice",
@@ -447,11 +439,11 @@
                             "Accediendo a una matriz estática en la memoria global de traducción.",
                             "Mediante un socket de red interproceso mapeado en el backend."
                         ],
-                        correct: 1 
+                        correct: 1 // Mantiene el índice original [1]
                     }]
                 },
                 {
-                    title: "Estructuras_Datos_Intermedias",
+                    title: "Estructuras de Datos Intermedias",
                     description: "Representación estructural construida con éxito al validar sintácticamente una expresión.",
                     questions: [{
                         type: "multiple_choice",
@@ -462,17 +454,17 @@
                             "Un grafo de flujo de bloques de control de ejecución.",
                             "Una tabla relacional hash de variables globales temporales."
                         ],
-                        correct: 1 
+                        correct: 1 // Mantiene el índice original [1]
                     }]
                 },
                 {
-                    title: "Atributos_Acciones_Semanticas",
+                    title: "Atributos y Acciones Semánticas",
                     description: "Código embebido que manipula directamente los valores sintácticos durante la compilación.",
                     questions: [{
                         type: "text",
                         title: "Explica brevemente (1 línea) el propósito del símbolo especial '$$' dentro de una regla de traducción de YACC.",
                         required: true,
-                        validation: "valor" 
+                        validation: "valor" // Mantiene compatibilidad semántica con la validación de texto
                     }]
                 }
             ]
@@ -485,9 +477,9 @@
         function startGame() {
             document.getElementById('startScreen').classList.add('hidden');
             document.getElementById('gameContainer').classList.remove('hidden');
-            logConsole("Invocando yyparse()...", "success");
+            logConsole("Lanzando parser sintáctico de evaluación...", "success");
             setTimeout(() => {
-                logConsole("Analizando flujo de entrada según gramática activa.", "warning");
+                logConsole("Tablas LALR cargadas correctamente. Ejecutando análisis.", "warning");
                 renderSection();
             }, 1000);
         }
@@ -497,38 +489,27 @@
             const content = document.getElementById('content');
             
             let html = `
-                <div class="yacc-section-title">%type &lt;evaluacion&gt; ${section.title.replace(/\s+/g, '_')}</div>
-                <div class="yacc-comment">/* ${section.description} */</div>
-                <div class="yacc-divider">%%</div>
+                <div class="section-title"># ${section.title}</div>
+                <div class="description">${section.description}</div>
             `;
 
             section.questions.forEach((q, index) => {
-                const ruleName = `produccion_${currentSection}_${index}`;
-                
-                html += `<div class="yacc-block">
-                    <span class="yacc-lhs">${ruleName} <span class="yacc-colon">:</span></span>
-                    <div class="yacc-rhs">
-                        <div class="yacc-comment">/* ${q.title} */</div>`;
+                html += `<div class="question">
+                    <div class="question-title">${q.title}</div>`;
                 
                 if (q.type === "text") {
-                    html += `<div style="display: flex; align-items: center; gap: 10px;">
-                                <span class="yacc-pipe"> </span>
-                                <span style="color: var(--primary);">TOKEN_STRING</span> 
-                                <input type="text" id="q${index}" placeholder='{ $$ = "tu_respuesta"; }'>
-                             </div>`;
+                    html += `<input type="text" id="q${index}" placeholder="Escribe el identificador o respuesta técnica exacta...">`;
                 } else if (q.type === "multiple_choice") {
+                    html += `<div class="options">`;
                     q.options.forEach((opt, i) => {
-                        const pipeChar = i === 0 ? "&nbsp;&nbsp;" : "|";
-                        html += `
-                        <div class="option" onclick="selectOption(${index}, ${i})" id="opt${index}_${i}">
-                            <span class="yacc-pipe">${pipeChar}</span>
-                            <span class="option-text">${opt}</span>
-                            <span class="yacc-action">{ $$ = ${i}; }</span>
+                        html += `<div class="option" onclick="selectOption(${index}, ${i})" id="opt${index}_${i}">
+                            [${i}] ${opt}
                         </div>`;
                     });
+                    html += `</div>`;
                 }
                 
-                html += `</div><div class="yacc-semi">;</div></div>`;
+                html += `</div>`;
             });
 
             content.innerHTML = html;
@@ -557,7 +538,7 @@
                 if (timeLeft <= 0) {
                     clearInterval(timerInterval);
                     timerElement.classList.remove('active');
-                    logConsole("[TIMEOUT] Timeout del scanner léxico.", "warning");
+                    logConsole("[TIMEOUT] Ciclos de reloj de CPU excedidos en el parser.", "warning");
                 }
             }, 1000);
         }
@@ -588,7 +569,7 @@
                     const value = input.value.trim();
                     
                     if (q.required && !value) {
-                        showError("yyerror: Token faltante en la regla.");
+                        showError("[ERROR] SyntaxError: Cadena vacía detectada. Se requiere una declaración.");
                         allValid = false;
                         return;
                     }
@@ -604,7 +585,7 @@
                 } else if (q.type === "multiple_choice") {
                     const selected = answers[currentSection] ? answers[currentSection][index] : null;
                     if (selected === null || selected === undefined) {
-                        showError("yyerror: Expresión no reducida. Selecciona una derivación válida.");
+                        showError("[ERROR] GramaticalError: Falta seleccionar el token o producción de la respuesta.");
                         allValid = false;
                         return;
                     }
@@ -621,7 +602,7 @@
             if (!allValid) return;
 
             answers[currentSection] = sectionAnswers;
-            logConsole(`Regla ${currentSection} reducida correctamente (Shift/Reduce ejecutado).`, "success");
+            logConsole(`Bloque [${currentSection}] procesado por el compilador con código de retorno 0.`, "success");
             
             currentSection++;
             
@@ -633,28 +614,28 @@
         }
 
         function triggerFailure() {
-            logConsole("[FATAL] Parse error: Syntax error en línea " + (currentSection * 10 + 5), "error");
-            logConsole("Abortando reducción de gramática...", "error");
+            logConsole("[FATAL] Parse error: Segmentation fault (core dumped)", "error");
+            logConsole("La gramática no se pudo derivar. Abortando flujo...", "error");
             
             setTimeout(() => {
                 const content = document.getElementById('content');
                 content.innerHTML = `
                     <div class="failure-screen">
-                        <h1>FATAL SYNTAX ERROR</h1>
+                        <h1>FATAL COMPILATION ERROR</h1>
                         <div class="ascii-art" style="color: var(--error);">
        -----------------------------------
-      |  [ yyparse() FAILED ]             |
+      |  [ PROCESS EXITED WITH CODE 139 ] |
       |                                   |
-      |     > SYNTAX ERROR                |
-      |     > UNEXPECTED TOKEN            |
+      |     > PARSE ERROR / YACC CRASH    |
+      |     > SEGMENTATION FAULT          |
        -----------------------------------
                         </div>
                         <p style="color: var(--error); margin: 20px 0; font-size: 1.2em; font-family: 'Fira Code', monospace;">
-                            yyerror("syntax error")
+                            Syntax Error: Core Dumped
                         </p>
-                        <p style="color: var(--text-muted);">El analizador encontró un token inesperado que no coincide con ninguna producción LALR(1).</p>
-                        <p style="color: var(--warning); margin-top: 20px;">Pila de estados corrompida. Se requiere reestructuración.</p>
-                        <button onclick="location.reload()">RECOMPILAR (MAKE CLEAN)</button>
+                        <p style="color: var(--text-muted);">El analizador sintáctico intentó procesar una reducción inválida en la pila de estados.</p>
+                        <p style="color: var(--warning); margin-top: 20px;">El árbol de derivación ha colapsado. Reajustando el estado inicial.</p>
+                        <button onclick="location.reload()">REINICIAR COMPILACIÓN (RESET)</button>
                     </div>
                 `;
                 document.getElementById('submitBtn').classList.add('hidden');
@@ -662,14 +643,7 @@
         }
 
         function showVictory() {
-            logConsole("[BUILD] yyparse() == 0. Árbol sintáctico generado con éxito.", "success");
-            
-            // Generador de código aleatorio (10 caracteres alfanuméricos)
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let verificationCode = '';
-            for (let i = 0; i < 10; i++) {
-                verificationCode += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            logConsole("[BUILD] Éxito global: 0 errores de sintaxis, 0 advertencias semánticas.", "success");
             
             const content = document.getElementById('content');
             content.innerHTML = `
@@ -683,27 +657,14 @@
        _________________________________
                     </div>
                     <h1>ANÁLISIS SINTÁCTICO COMPLETADO</h1>
-                    <div class="yacc-section-title" style="color: var(--secondary);">return 0;</div>
+                    <div class="section-title" style="color: var(--secondary);">Código compilado exitosamente</div>
                     <p style="color: var(--text-muted); margin: 20px 0; line-height: 1.8;">
                         La validación sintáctica mediante YACC se ha completado perfectamente.<br>
-                        Se han resuelto las precedencias sin conflictos de Shift/Reduce.<br>
+                        Se han resuelto las precedencias y el AST se ha generado de forma óptima.<br>
                         <br>
-                        <span style="color: var(--primary); font-family: 'Fira Code', monospace; font-size: 1.2em;">> AST GENERADO CORRECTAMENTE.</span>
+                        <span style="color: var(--primary); font-family: 'Fira Code', monospace; font-size: 1.2em;">> READY. Compilación cerrada con éxito.</span>
                     </p>
-                    
-                    <div class="verification-box">
-                        <p style="color: var(--warning); font-family: 'Fira Code', monospace; font-size: 1.1em; margin-bottom: 15px;">
-                            /* REQUIRED: OUTPUT HASH */
-                        </p>
-                        <p style="color: var(--text-main); font-size: 1.2em;">
-                            Envía a Ángel Daniel el siguiente código:<br><br>
-                            <strong style="color: var(--primary); font-size: 1.8em; letter-spacing: 4px; background: rgba(34, 197, 94, 0.1); padding: 10px 20px; border-radius: 4px; border: 1px solid var(--primary);">
-                                ${verificationCode}
-                            </strong>
-                        </p>
-                    </div>
-                    
-                    <button onclick="location.reload()">REINICIAR ANALIZADOR (./a.out)</button>
+                    <button onclick="location.reload()">PROCESAR NUEVO FUENTE</button>
                 </div>
             `;
             document.getElementById('submitBtn').classList.add('hidden');
@@ -728,9 +689,9 @@
         }
 
         console.log("%c===========================================================", "color: #22c55e; font-family: monospace;");
-        console.log("%c  YACC / BISON PARSER ENVIRONMENT", "color: #22c55e; font-family: monospace; font-weight: bold;");
+        console.log("%c  FRAMEWORK DE COMPILACIÓN: COMPILADORES / SOFTWARE DE BASE", "color: #22c55e; font-family: monospace; font-weight: bold;");
         console.log("%c===========================================================", "color: #22c55e; font-family: monospace;");
-        console.log("%c> Preparando autómata de pila...", "color: #06b6d4; font-family: monospace;");
+        console.log("%c> Escuchando eventos del analizador sintáctico YACC...", "color: #94a3b8; font-family: monospace;");
     </script>
 </body>
 </html>
